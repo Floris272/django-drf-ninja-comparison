@@ -8,7 +8,7 @@ api = NinjaAPI()
 
 @api.exception_handler(ValidationError)
 def custom_validation_errors(request, exc):
-    return api.create_response(request, {}, status=422)
+    return api.create_response(request, exc.message_dict, status=422)
 
 
-api.add_router("/projects/", projects_router)
+api.add_router("", projects_router)

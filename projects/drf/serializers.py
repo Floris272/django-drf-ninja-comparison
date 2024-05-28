@@ -10,6 +10,11 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    project_id = serializers.PrimaryKeyRelatedField(
+        source="project",
+        queryset=Project.objects.all(),
+    )
+
     class Meta:
         model = Employee
-        fields = "__all__"
+        exclude = ["project"]

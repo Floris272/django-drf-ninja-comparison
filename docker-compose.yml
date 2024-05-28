@@ -1,0 +1,35 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres
+
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_PASSWORD: comparison
+      POSTGRES_USER: comparison
+      POSTGRES_DB: comparison
+
+  sync:
+    container_name: sync
+    build: .
+    command: sh -c "./manage.py migrate; gunicorn comparison.wsgi -b '0.0.0.0:8000' --workers ${WORKERS}"
+    ports:
+      - 8000:8000
+    environment:
+      DB_HOST: postgres
+    depends_on:
+      - db
+
+  async:
+    container_name: async
+    build: .
+    command: sh -c "./manage.py migrate; uvicorn comparison.asgi:application --host 0.0.0.0 --workers ${WORKERS}"
+    ports:
+      - 8000:8000
+    environment:
+      DB_HOST: postgres
+    depends_on:
+      - db
