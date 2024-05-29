@@ -9,4 +9,4 @@
 
 - python -m venv env
 - pip install -r requirements
-- ./run-locust.sh [WORKERS] (default 1)
+- ./run-locust.sh [WORKERS]

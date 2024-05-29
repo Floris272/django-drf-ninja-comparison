@@ -1,3 +1,9 @@
+#!/bin/bash
+if [[ $# != 1 ]] ; then
+  echo 'USAGE: run-locust.sh [WORKERS]'
+  exit 0
+fi
+
 docker compose build
 
 WORKERS=$1 docker compose up db sync -d

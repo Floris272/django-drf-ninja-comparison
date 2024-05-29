@@ -1,9 +1,9 @@
+import json
+import sys
 import time
 
-from locust import HttpUser, task, events
-import json
 import requests
-import sys
+from locust import HttpUser, events, task
 
 
 @events.init_command_line_parser.add_listener
@@ -28,7 +28,8 @@ def init_parser(parser):
 def on_test_start(environment, **kwargs):
     try:
         requests.post(environment.host + "/ninja/restart", timeout=10)
-    except:
+    except Exception as e:
+        print(e)
         sys.exit(0)
 
     with open(environment.parsed_options.data, "r") as f:
@@ -49,9 +50,9 @@ class TestUser(HttpUser):
         super().__init__(*args, **kwargs)
         self.endpoint = self.environment.parsed_options.endpoint
         self.n = int(self.environment.parsed_options.n)
-        json_file_name = self.environment.parsed_options.data
+        json_file = self.environment.parsed_options.data
 
-        with open(json_file_name, "r") as f:
+        with open(json_file, "r") as f:
             self.data = json.load(f)
 
     @task
