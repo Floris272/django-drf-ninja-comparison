@@ -8,5 +8,5 @@
 ## Setup
 
 - python -m venv env
-- pip install -r requirements
+- pip install locust
 - ./run-locust.sh [WORKERS]
